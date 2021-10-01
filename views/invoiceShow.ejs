@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="preconnect" href="https://fonts.googleapis.com">
+	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+	<link href="https://fonts.googleapis.com/css2?family=Spartan:wght@500;700&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="style.css">
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicon-32x32.png">
+
+  <title>Frontend Mentor | Invoice app</title>
+</head>
+
+<body class="light-bg">
+	
+<aside>
+	<div class="aside-1">
+	<svg width="103" height="103" viewBox="0 0 103 103" fill="none" xmlns="http://www.w3.org/2000/svg">
+		<path d="M0 0H83C94.0457 0 103 8.9543 103 20V83C103 94.0457 94.0457 103 83 103H0V0Z" fill="#7C5DFA"/>
+		<mask id="mask0" mask-type="alpha" maskUnits="userSpaceOnUse" x="0" y="0" width="103" height="103">
+		<path d="M0 0H83C94.0457 0 103 8.9543 103 20V83C103 94.0457 94.0457 103 83 103H0V0Z" fill="white"/>
+		</mask>
+		<g mask="url(#mask0)">
+		<path d="M103 52H20C8.95431 52 0 60.9543 0 72V135C0 146.046 8.95431 155 20 155H103V52Z" fill="#9277FF"/>
+		</g>
+		<path fill-rule="evenodd" clip-rule="evenodd" d="M42.6942 33.2923L52 52L61.3058 33.2923C67.6645 36.6408 72 43.3141 72 51C72 62.0457 63.0457 71 52 71C40.9543 71 32 62.0457 32 51C32 43.3141 36.3355 36.6408 42.6942 33.2923Z" fill="white"/>
+		</svg>
+	</div>
+	<div class="aside-2">
+		<svg id="dark-mode" width="40" height="40" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+			<path d="M19.5016 11.3423C19.2971 11.2912 19.0927 11.3423 18.9137 11.4701C18.2492 12.0324 17.4824 12.4924 16.639 12.7991C15.8466 13.1059 14.9776 13.2592 14.0575 13.2592C11.9872 13.2592 10.0958 12.4158 8.74121 11.0611C7.38658 9.70649 6.54313 7.81512 6.54313 5.74483C6.54313 4.87582 6.69649 4.03237 6.95208 3.26559C7.23323 2.4477 7.64217 1.70649 8.17891 1.06751C8.40895 0.786362 8.35783 0.377416 8.07668 0.147384C7.89776 0.0195887 7.69329 -0.0315295 7.48882 0.0195887C5.31629 0.607448 3.42492 1.91096 2.07029 3.64898C0.766773 5.36144 0 7.48285 0 9.78317C0 12.5691 1.1246 15.0995 2.96486 16.9397C4.80511 18.78 7.3099 19.9046 10.1214 19.9046C12.4728 19.9046 14.6454 19.0867 16.3834 17.732C18.147 16.3519 19.4249 14.3838 19.9617 12.1346C20.0639 11.7768 19.8594 11.419 19.5016 11.3423Z" fill="#7E88C3"/>
+			</svg>
+			<div class="border"></div>
+			<img src="./assets/image-avatar.jpg" alt="Man">
+	</div>
+		
+</aside>
+<div id="overlay" class="overlay"></div>
+<div class="body-container">
+	<div class="go-back">
+	<a href="/"><svg width="7" height="12" xmlns="http://www.w3.org/2000/svg"><path d="M6.342.886L2.114 5.114l4.228 4.228" stroke="#9277FF" stroke-width="2" fill="none" fill-rule="evenodd"/></svg> <span>Go Back</span></a>
+</div>
+	<div class="invoice-header">
+		<div class="status">
+			<p>Status</p>
+			<p class="<%= invoice.status %>"><%= invoice.status.charAt(0).toUpperCase() + invoice.status.slice(1) %></p>
+		</div>
+		<div class="invoice-buttons">
+			<button id="edit-invoice" class="button-3-light">Edit</button>
+				<button id="delete" class="button-5">Delete</button>
+			<form action="http://127.0.0.1:3000/payment-status/<%=invoice.id%>?_method=POST" method="POST">
+				<button class="button-2">Mark as Paid</button>
+			</form>
+		</div>
+	</div>
+
+	<div id="delete-modal" class="delete-modal">
+		<div class="modal-container">
+		<h2>Confirm Deletion</h2>
+		<p>Are you sure you want to delete invoice #<%= invoice.id.toString().substring(0, 6) %>? This action cannot be undone.</p>
+		<div class="modal-buttons">
+		<button class="button-3-light" id="cancel">Cancel</button>
+		<form action="/delete/<%=invoice.id%>?_method=POST" method="POST">
+			<button type="submit" formmethod="POST" class="button-5">Delete</button>
+		</form>
+	</div>
+	</div>
+	</div>
+
+	<div id="invoice-edit-form" class="invoice-edit-form">
+		<p class="id"><span>Edit #</span><%= invoice.id.toString().substring(0, 6) %></p>
+		<h3>Bill From</h3>
+		<form action="/update/<%= invoice.id %>?_method=PATCH" method="POST">
+			<label for="Street address">Street address</label>
+			<input type="text" name="senderStreet">
+			<div class="address">
+				<div>
+					<label for="City">City</label>
+					<input type="text" name="senderCity" required>
+				</div>
+				<div>
+					<label for="Postcode">Postcode</label>
+					<input type="text" name="senderPostcode" required>
+				</div>
+				<div>
+					<label for="Country">Country</label>
+					<input type="text" name="senderCountry" required>
+				</div>
+			</div>
+			<h3>Bill To</h3>
+			<label for="Client's name">Client's Name</label>
+			<input type="text" name="clientName" required>
+			<label for="Client's email">Client's Email</label>
+			<input type="text" name="clientEmail" required>
+			<label for="Client's address">Client's address</label>
+			<input type="text" name="billToStreet" required>
+			<div class="address">
+				<div>
+					<label for="City">City</label>
+					<input type="text" name="billToCity" required>
+				</div>
+				<div>
+					<label for="Postcode">Post code</label>
+					<input type="text" name="billToPostcode" required>
+				</div>
+				<div>
+					<label for="Country">Country</label>
+					<input type="text" name="billToCountry" required>
+				</div>
+			</div>
+			<div class="dates">
+				<div class="date-input">
+					<label for="Invoice Date">Invoice Date</label>
+					<input type="date" name="createdAt" required>
+				</div>
+				<div class="date-input">
+					<label for="Payment Due">Payment Due</label>
+					<input type="date" name="paymentDue" required>
+				</div>
+			</div>
+			<div>
+				<label for="Description">Project Description</label>
+				<input type="text" name="description" required>
+			</div>
+			<h3 class="item-list">Item List</h3>
+			<div class="items">
+				<div>
+					<label for="Item Name">Item Name</label>
+					<input type="text" name="item[][itemName]" required>
+				</div>
+				<div>
+					<label for="Qty.">Qty.</label>
+					<input id="itemQty" type="text" name="item[][itemQuantity]" required>
+				</div>
+				<div>
+					<label for="Item Price">Price</label>
+					<input id="itemPrice" type="text" name="item[][itemPrice]" required>
+				</div>
+				<div>
+					<label for="Total Price">Total</label>
+					<span id="total"></span>
+				</div>
+			</div>
+			<div class="edit-buttons">
+				<div>
+					<button id="cancel-edit" class="button-4-dark" type="button">Cancel</button>
+					<button formmethod="POST" class="button-2">Save & Send</button>
+				</div>
+			</div>
+		</form>
+	</div>
+
+	<div class="invoice-detail-container">
+						<div class="ic-1">
+							<div class="ic-1-1">
+							<p class="id invoice-bold"><span>#</span><%= invoice.id.toString().substring(0, 6) %></p>
+							<p> <%= invoice.description %></p>
+						</div>
+						<div class="ic-1-2">
+							<p><%= invoice.senderStreet %></p>
+							<p><%= invoice.senderCity %></p>
+							<p><%= invoice.senderPostcode %></p>
+						</div>
+						</div>
+						<div class="ic-2">
+							<div class="ic-2-1">
+								<p>Invoice Date</p>
+								<p class="invoice-bold">
+									<%= invoice.createdAt.toDateString() %>
+								</p>
+								<p>Payment Due</p>
+								<p class="invoice-bold">
+									<%= invoice.paymentDue.toDateString() %>
+								</p>
+							</div>
+							<div class="ic-2-2">
+								<p>Bill To</p>
+								<p class="invoice-bold">
+									<%= invoice.clientName %>
+								</p>
+								<p>									
+									<%= invoice.billToStreet %>
+								</p>
+								<p class="city">
+									<%= invoice.billToCity %>
+								</p>
+								<p class="post">
+									<%= invoice.billToPostcode %>
+								</p>
+								<p>
+									<%= invoice.billToCountry %>
+								</p>
+							</div>
+							<div class="ic-2-3">
+								<p>Sent to</p>
+								<p class="invoice-bold">
+									<%= invoice.clientEmail %>
+								</p>
+							</div>
+						</div>
+						<div class="invoice-items-container">
+							<div class="invoice-items-header">
+							<p class="item-name">Item Name</p>
+							<p>QTY.</p>
+							<p>Price</p>
+							<p>Total</p>
+						</div>
+							<% invoice.item.forEach(i => { %>
+
+								<div class="item-container">
+									<p class="invoice-bold item-name">
+										<%= i.itemName %>
+									</p>
+									<p class="item-quantity">
+										<%= i.itemQuantity %>
+									</p>
+									<p class="item-price">
+										£<%=i.itemPrice.toFixed(2) %>
+									</p>
+									<p class="invoice-bold item-total">
+										£<%= i.itemQuantity * i.itemPrice.toFixed(2) %>
+									</p>
+									
+								</div>
+
+								
+								<div class="item-container-footer">
+									<p class="amount-due">Amount Due</p>
+									<p id="total-price">£<%= i.itemQuantity * i.itemPrice.toFixed(2) %> </p>
+								</div>
+								<% }) %>
+						</div>
+	</div>
+</div>
+
+
+<script src="invoiceShow.js"></script>
+<script src="edit.js"></script>
