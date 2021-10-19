@@ -49,7 +49,7 @@
 		<div class="invoice-buttons">
 			<button id="edit-invoice" class="button-3-light">Edit</button>
 				<button id="delete" class="button-5">Delete</button>
-			<form action="http://127.0.0.1:3000/payment-status/<%=invoice.id%>?_method=POST" method="POST">
+			<form action="/payment-status/<%=invoice.id%>?_method=POST" method="POST">
 				<button class="button-2">Mark as Paid</button>
 			</form>
 		</div>
